@@ -1,0 +1,40 @@
+{
+  "name": "gcode-interpreter",
+  "version": "0.1.0",
+  "description": "A G-code interpreter for Node.js",
+  "author": "Cheton Wu <cheton@gmail.com>",
+  "homepage": "https://github.com/cheton/gcode-interpreter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:cheton/gcode-interpreter.git"
+  },
+  "engines": {
+    "node": ">=0.10.x"
+  },
+  "scripts": {
+    "test": "gulp && gulp test",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --require babel-core/register -R spec",
+    "coverage-clean": "rm -rf ./coverage",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+  },
+  "main": "dist/index.js",
+  "dependencies": {
+    "gcode-parser": "^0.2.0",
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {
+    "babel": "^6.1.18",
+    "babel-core": "^6.2.1",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-stage-0": "^6.1.18",
+    "babel-runtime": "^6.2.0",
+    "chai": "^3.4.1",
+    "coveralls": "^2.11.4",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.0",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.2.0",
+    "mocha": "^2.3.4"
+  }
+}
