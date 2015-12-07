@@ -7,7 +7,7 @@ const expect = chai.expect;
 const should = chai.should();
 
 describe('G-code Interpreter', (done) => {
-	describe('Pass a null value as the first argument', (done) => {
+    describe('Pass a null value as the first argument', (done) => {
         class GCodeRunner extends GCodeInterpreter {
             constructor(options) {
                 super(options);
@@ -16,27 +16,27 @@ describe('G-code Interpreter', (done) => {
 
         let runner = new GCodeRunner();
 
-		it('should call interpretText\'s callback.', (done) => {
+        it('should call interpretText\'s callback.', (done) => {
             runner.interpretText(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
-		});
-		it('should call interpretFile\'s callback.', (done) => {
+        });
+        it('should call interpretFile\'s callback.', (done) => {
             runner.interpretFile(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
-		});
-		it('should call interpretStream\'s callback.', (done) => {
+        });
+        it('should call interpretStream\'s callback.', (done) => {
             runner.interpretStream(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
-		});
+        });
     });
 
-	describe('G-code: circle', (done) => {
+    describe('G-code: circle', (done) => {
         let calls = {};
 
         class GCodeRunner extends GCodeInterpreter {
@@ -57,7 +57,7 @@ describe('G-code Interpreter', (done) => {
             }
         }
 
-		it('should call each function with the expected number of times.', (done) => {
+        it('should call each function with the expected number of times.', (done) => {
             let runner = new GCodeRunner();
             runner.interpretFile('test/fixtures/circle.nc', (err, results) => {
                 expect(calls.G0).to.equal(2);
@@ -68,7 +68,7 @@ describe('G-code Interpreter', (done) => {
         });
     });
 
-	describe('G-code: 1 inch circle', (done) => {
+    describe('G-code: 1 inch circle', (done) => {
         let calls = {};
 
         class GCodeRunner extends GCodeInterpreter {
@@ -104,7 +104,7 @@ describe('G-code Interpreter', (done) => {
             }
         }
 
-		it('should call each function with the expected number of times.', (done) => {
+        it('should call each function with the expected number of times.', (done) => {
             let runner = new GCodeRunner();
             runner.interpretFile('test/fixtures/one-inch-circle.nc', (err, results) => {
                 expect(calls.G0).to.equal(4);
