@@ -45,7 +45,7 @@ runner.interpretText(text, function(err, data) {
 
 ## Examples
 
-You can run this example with babel-node:
+Run this example with babel-node:
 ```js
 import { GCodeInterpreter } from 'gcode-interpreter';
 
