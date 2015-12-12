@@ -92,6 +92,16 @@ class GCodeRunner extends GCodeInterpreter {
 }
 
 let runner = new GCodeRunner();
+
+// optional event callbacks
+runner
+    .on('data', (data) => {
+        console.log(data);
+    })
+    .on('end', (results) => {
+        console.log(results);
+    });
+
 runner.interpretText(GCODE_TEXT, (err, results) => {
 });
 ```
