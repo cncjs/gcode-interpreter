@@ -15,7 +15,6 @@ describe('G-code Interpreter', (done) => {
         }
 
         let runner = new GCodeRunner();
-
         it('should call interpretText\'s callback.', (done) => {
             runner.interpretText(null, (err, results) => {
                 expect(err).to.be.okay;
@@ -30,6 +29,30 @@ describe('G-code Interpreter', (done) => {
         });
         it('should call interpretStream\'s callback.', (done) => {
             runner.interpretStream(null, (err, results) => {
+                expect(err).to.be.okay;
+                done();
+            });
+        });
+    });
+
+    describe('Event callbacks', (done) => {
+        class GCodeRunner extends GCodeInterpreter {
+            constructor(options) {
+                super(options);
+            }
+        }
+
+        let runner = new GCodeRunner();
+        runner
+            .on('data', (data) => {
+                expect(data).to.be.an('object');
+            })
+            .on('end', (results) => {
+                expect(results).to.be.an('array');
+            });
+
+        it('should call event callbacks.', (done) => {
+            runner.interpretFile('test/fixtures/circle.nc', (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
