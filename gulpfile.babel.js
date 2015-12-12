@@ -23,7 +23,7 @@ gulp.task('test', ['pre-test'], () => {
             thresholds: {
                 global: {
                     statements: 90,
-                    branches: 60,
+                    branches: 70,
                     functions: 90,
                     lines: 90
                 }
