@@ -67,7 +67,15 @@ const interpret = (self, data) => {
 
 class GCodeInterpreter {
     cmd = '';
+    _callbacks = {
+        'data': [],
+        'end': []
+    };
 
+    on(evt, callback) {
+        this._callbacks[evt] && this._callbacks[evt].push(callback);
+        return this;
+    }
     interpretStream(stream, callback) {
         callback = callback || (() => {});
 
@@ -75,20 +83,28 @@ class GCodeInterpreter {
             let results = [];
             stream.pipe(new GCodeParser())
                 .on('data', (data) => {
+                    this._callbacks['data'].forEach((f) => {
+                        f(data);
+                    });
                     results.push(data);
                     interpret(this, data);
                 })
                 .on('end', () => {
+                    this._callbacks['end'].forEach((f) => {
+                        f(results);
+                    });
                     callback(null, results);
                 })
-                .on('error', callback);
+                .on('error', (err) => {
+                    callback(err);
+                });
         }
         catch(err) {
             callback(err);
-            return;
+            return this;
         }
 
-        return stream;
+        return this;
     }
     interpretFile(file, callback) {
         file = file || '';
