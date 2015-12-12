@@ -92,9 +92,19 @@ var GCodeInterpreter = (function () {
         _classCallCheck(this, GCodeInterpreter);
 
         this.cmd = '';
+        this._callbacks = {
+            'data': [],
+            'end': []
+        };
     }
 
     _createClass(GCodeInterpreter, [{
+        key: 'on',
+        value: function on(evt, callback) {
+            this._callbacks[evt] && this._callbacks[evt].push(callback);
+            return this;
+        }
+    }, {
         key: 'interpretStream',
         value: function interpretStream(stream, callback) {
             var _this = this;
@@ -105,18 +115,26 @@ var GCodeInterpreter = (function () {
                 (function () {
                     var results = [];
                     stream.pipe(new _gcodeParser.GCodeParser()).on('data', function (data) {
+                        _this._callbacks['data'].forEach(function (f) {
+                            f(data);
+                        });
                         results.push(data);
                         interpret(_this, data);
                     }).on('end', function () {
+                        _this._callbacks['end'].forEach(function (f) {
+                            f(results);
+                        });
                         callback(null, results);
-                    }).on('error', callback);
+                    }).on('error', function (err) {
+                        callback(err);
+                    });
                 })();
             } catch (err) {
                 callback(err);
-                return;
+                return this;
             }
 
-            return stream;
+            return this;
         }
     }, {
         key: 'interpretFile',
