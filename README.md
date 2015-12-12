@@ -96,10 +96,10 @@ let runner = new GCodeRunner();
 // optional event callbacks
 runner
     .on('data', (data) => {
-        console.log(data);
+        // 'data' event callback
     })
     .on('end', (results) => {
-        console.log(results);
+        // 'end' event callback
     });
 
 runner.interpretText(GCODE_TEXT, (err, results) => {
