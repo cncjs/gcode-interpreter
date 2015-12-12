@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>gcode-interpreter by cheton</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">gcode-interpreter</h1>
+      <h2 class="project-tagline">A G-code interpreter for Node.js</h2>
+      <a href="https://github.com/cheton/gcode-interpreter" class="btn">View on GitHub</a>
+      <a href="https://github.com/cheton/gcode-interpreter/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/cheton/gcode-interpreter/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="gcode-interpreter--" class="anchor" href="#gcode-interpreter--" aria-hidden="true"><span class="octicon octicon-link"></span></a>gcode-interpreter <a href="https://travis-ci.org/cheton/gcode-interpreter"><img src="https://travis-ci.org/cheton/gcode-interpreter.svg?branch=master" alt="build status"></a> <a href="https://coveralls.io/github/cheton/gcode-interpreter?branch=master"><img src="https://coveralls.io/repos/cheton/gcode-interpreter/badge.svg?branch=master&amp;service=github" alt="Coverage Status"></a>
+</h1>
+
+<p><a href="https://nodei.co/npm/gcode-interpreter/"><img src="https://nodei.co/npm/gcode-interpreter.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<p><code>npm install --save gcode-interpreter</code></p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> fs <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>fs<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> util <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>util<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> GCodeInterpreter <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gcode-interpreter<span class="pl-pds">'</span></span>).<span class="pl-smi">GCodeInterpreter</span>;
+
+<span class="pl-k">var</span> <span class="pl-en">GCodeRunner</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
+    <span class="pl-smi">GCodeInterpreter</span>.<span class="pl-c1">call</span>(<span class="pl-v">this</span>);
+};
+<span class="pl-smi">util</span>.<span class="pl-en">inherits</span>(GCodeRunner, GCodeInterpreter);
+
+<span class="pl-c1">GCodeRunner</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">G0</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">args</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G0<span class="pl-pds">'</span></span>, args);
+};
+
+<span class="pl-c1">GCodeRunner</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">G1</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">args</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G1<span class="pl-pds">'</span></span>, args);
+};
+
+<span class="pl-k">var</span> runner <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">GCodeRunner</span>();
+
+<span class="pl-c">// Interpret G-code from file</span>
+<span class="pl-k">var</span> file <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>example.nc<span class="pl-pds">'</span></span>;
+<span class="pl-smi">runner</span>.<span class="pl-en">interpretFile</span>(file, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">data</span>) {
+});
+
+<span class="pl-c">// Interpret G-code from stream</span>
+<span class="pl-k">var</span> stream <span class="pl-k">=</span> <span class="pl-smi">fs</span>.<span class="pl-en">createReadStream</span>(file, { encoding<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>utf8<span class="pl-pds">'</span></span> });
+<span class="pl-smi">runner</span>.<span class="pl-en">interpretStream</span>(stream, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">data</span>) {
+});
+
+<span class="pl-c">// Interpret G-code from text string</span>
+<span class="pl-k">var</span> text <span class="pl-k">=</span> <span class="pl-smi">fs</span>.<span class="pl-en">readFileSync</span>(file, <span class="pl-s"><span class="pl-pds">'</span>utf8<span class="pl-pds">'</span></span>);
+<span class="pl-smi">runner</span>.<span class="pl-en">interpretText</span>(text, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">data</span>) {
+});</pre></div>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>Run this example with babel-node:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> { <span class="pl-smi">GCodeInterpreter</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>gcode-interpreter<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">const</span> <span class="pl-c1">GCODE_TEXT</span> <span class="pl-k">=</span> [
+    <span class="pl-s"><span class="pl-pds">'</span>N1 G17 G20 G90 G94 G54<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N2 G0 Z0.25<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N3 X-0.5 Y0.<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N4 Z0.1<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N5 G01 Z0. F5.<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N6 G02 X0. Y0.5 I0.5 J0. F2.5<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N7 X0.5 Y0. I0. J-0.5<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N8 X0. Y-0.5 I-0.5 J0.<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N9 X-0.5 Y0. I0. J0.5<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N10 G01 Z0.1 F5.<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>N11 G00 X0. Y0. Z0.25<span class="pl-pds">'</span></span>
+].<span class="pl-c1">join</span>(<span class="pl-s"><span class="pl-pds">'</span><span class="pl-cce">\n</span><span class="pl-pds">'</span></span>);
+
+<span class="pl-k">class</span> <span class="pl-en">GCodeRunner</span> <span class="pl-k">extends</span> <span class="pl-en">GCodeInterpreter</span> {
+    <span class="pl-en">G17</span>() {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G17<span class="pl-pds">'</span></span>);
+    }
+    <span class="pl-en">G20</span>() {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G20<span class="pl-pds">'</span></span>);
+    }
+    <span class="pl-en">G90</span>() {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G90<span class="pl-pds">'</span></span>);
+    }
+    <span class="pl-en">G94</span>() {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G94<span class="pl-pds">'</span></span>);
+    }
+    <span class="pl-en">G54</span>() {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G54<span class="pl-pds">'</span></span>);
+    }
+    <span class="pl-en">G0</span>(<span class="pl-smi">args</span>) {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G0<span class="pl-pds">'</span></span>, args);
+    }
+    <span class="pl-en">G1</span>(<span class="pl-smi">args</span>) {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G1<span class="pl-pds">'</span></span>, args);
+    }
+    <span class="pl-en">G2</span>(<span class="pl-smi">args</span>) {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G2<span class="pl-pds">'</span></span>, args);
+    }
+}
+
+<span class="pl-k">let</span> runner <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">GCodeRunner</span>();
+
+<span class="pl-c">// optional event callbacks</span>
+runner
+    .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>data<span class="pl-pds">'</span></span>, (<span class="pl-smi">data</span>) <span class="pl-k">=&gt;</span> {
+        <span class="pl-c">// 'data' event callback</span>
+    })
+    .<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>end<span class="pl-pds">'</span></span>, (<span class="pl-smi">results</span>) <span class="pl-k">=&gt;</span> {
+        <span class="pl-c">// 'end' event callback</span>
+    });
+
+<span class="pl-smi">runner</span>.<span class="pl-en">interpretText</span>(<span class="pl-c1">GCODE_TEXT</span>, (<span class="pl-smi">err</span>, <span class="pl-smi">results</span>) <span class="pl-k">=&gt;</span> {
+});</pre></div>
+
+<p>and you will see the output as below:</p>
+
+<pre><code>G17
+G20
+G90
+G94
+G54
+G0 { Z: 0.25 }
+G0 { X: -0.5, Y: 0 }
+G0 { Z: 0.1 }
+G1 { Z: 0, F: 5 }
+G2 { X: 0, Y: 0.5, I: 0.5, J: 0, F: 2.5 }
+G2 { X: 0.5, Y: 0, I: 0, J: -0.5 }
+G2 { X: 0, Y: -0.5, I: -0.5, J: 0 }
+G2 { X: -0.5, Y: 0, I: 0, J: 0.5 }
+G1 { Z: 0.1, F: 5 }
+G0 { X: 0, Y: 0, Z: 0.25 }
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/cheton/gcode-interpreter">gcode-interpreter</a> is maintained by <a href="https://github.com/cheton">cheton</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
