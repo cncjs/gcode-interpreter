@@ -33,24 +33,22 @@
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> fs <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>fs<span class="pl-pds">'</span></span>);
-<span class="pl-k">var</span> util <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>util<span class="pl-pds">'</span></span>);
-<span class="pl-k">var</span> GCodeInterpreter <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gcode-interpreter<span class="pl-pds">'</span></span>).<span class="pl-smi">GCodeInterpreter</span>;
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> GCodeInterpreter <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>gcode-interpreter<span class="pl-pds">'</span></span>).<span class="pl-smi">GCodeInterpreter</span>;
 
 <span class="pl-k">var</span> <span class="pl-en">GCodeRunner</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
-    <span class="pl-smi">GCodeInterpreter</span>.<span class="pl-c1">call</span>(<span class="pl-v">this</span>);
-};
-<span class="pl-smi">util</span>.<span class="pl-en">inherits</span>(GCodeRunner, GCodeInterpreter);
+    <span class="pl-k">var</span> handlers <span class="pl-k">=</span> {
+        <span class="pl-s"><span class="pl-pds">'</span>G0<span class="pl-pds">'</span></span><span class="pl-k">:</span> (<span class="pl-smi">args</span>) <span class="pl-k">=&gt;</span> {
+            <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G0<span class="pl-pds">'</span></span>, args);
+        },
+        <span class="pl-s"><span class="pl-pds">'</span>G1<span class="pl-pds">'</span></span><span class="pl-k">:</span> (<span class="pl-smi">args</span>) <span class="pl-k">=&gt;</span> {
+            <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G1<span class="pl-pds">'</span></span>, args);
+        }
+    };
 
-<span class="pl-c1">GCodeRunner</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">G0</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">args</span>) {
-    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G0<span class="pl-pds">'</span></span>, args);
+    <span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-en">GCodeInterpreter</span>({ handlers<span class="pl-k">:</span> handlers })
 };
 
-<span class="pl-c1">GCodeRunner</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">G1</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">args</span>) {
-    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>G1<span class="pl-pds">'</span></span>, args);
-};
-
-<span class="pl-k">var</span> runner <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">GCodeRunner</span>();
+<span class="pl-k">var</span> runner <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">GCodeRunner</span>()
 
 <span class="pl-c">// Interpret G-code from file</span>
 <span class="pl-k">var</span> file <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>example.nc<span class="pl-pds">'</span></span>;
