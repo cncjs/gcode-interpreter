@@ -59,7 +59,46 @@ describe('G-code Interpreter', (done) => {
         });
     });
 
-    describe('G-code: circle', (done) => {
+    describe('G-code: circle (calls GCodeInterpreter)', (done) => {
+        it('should call each function with the expected number of times.', (done) => {
+            let calls = {};
+
+            class GCodeRunner {
+                loadFile(file, callback) {
+                    const handlers = {
+                        'G0': (args) => {
+                            calls.G0 = (calls.G0 || 0) + 1;
+                            expect(args).to.be.an('object');
+                        },
+                        'G1': (args) => {
+                            calls.G1 = (calls.G1 || 0) + 1;
+                            expect(args).to.be.an('object');
+                        },
+                        'G2': (args) => {
+                            calls.G2 = (calls.G2 || 0) + 1;
+                            expect(args).to.be.an('object');
+                        }
+                    };
+
+                    let interpreter = new GCodeInterpreter({ handlers: handlers })
+                    interpreter.interpretFile(file, callback);
+
+                    return interpreter;
+                }
+            };
+
+            new GCodeRunner().loadFile('test/fixtures/circle.nc', (err, results) => {
+                expect(calls.G0).to.equal(2);
+                expect(calls.G1).to.equal(1);
+                expect(calls.G2).to.equal(4);
+                done();
+            });
+        });
+
+    });
+
+
+    describe('G-code: circle (extends GCodeInterpreter)', (done) => {
         let calls = {};
 
         class GCodeRunner extends GCodeInterpreter {

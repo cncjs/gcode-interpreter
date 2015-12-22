@@ -9,24 +9,22 @@
 ## Usage
 
 ```js
-var fs = require('fs');
-var util = require('util');
 var GCodeInterpreter = require('gcode-interpreter').GCodeInterpreter;
 
 var GCodeRunner = function() {
-    GCodeInterpreter.call(this);
-};
-util.inherits(GCodeRunner, GCodeInterpreter);
+    var handlers = {
+        'G0': (args) => {
+            console.log('G0', args);
+        },
+        'G1': (args) => {
+            console.log('G1', args);
+        }
+    };
 
-GCodeRunner.prototype.G0 = function(args) {
-    console.log('G0', args);
+    return new GCodeInterpreter({ handlers: handlers })
 };
 
-GCodeRunner.prototype.G1 = function(args) {
-    console.log('G1', args);
-};
-
-var runner = new GCodeRunner();
+var runner = new GCodeRunner()
 
 // Interpret G-code from file
 var file = 'example.nc';

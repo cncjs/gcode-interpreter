@@ -38,7 +38,7 @@ const interpret = (self, data) => {
         let word = words[0] || [];
         let letter = word[0];
         let arg = word[1];
-        let cmd = (letter + arg).replace('.', '_');
+        let cmd = (letter + arg);
         let args = {};
 
         if (_.includes(['G', 'M'], letter)) {
@@ -58,6 +58,11 @@ const interpret = (self, data) => {
             args = _.zipObject(words); // returns an object composed from arrays of property names and values.
         }
 
+        if (typeof self.handlers[cmd] === 'function') {
+            let func = self.handlers[cmd];
+            func(args);
+        }
+
         if (typeof self[cmd] === 'function') {
             let func = self[cmd].bind(self);
             func(args);
@@ -67,11 +72,19 @@ const interpret = (self, data) => {
 
 class GCodeInterpreter {
     cmd = '';
+    handlers = {};
+
     _callbacks = {
         'data': [],
         'end': []
     };
 
+    constructor(options) {
+        options = options || {};
+        options.handlers = options.handlers || {};
+
+        this.handlers = options.handlers;
+    }
     on(evt, callback) {
         this._callbacks[evt] && this._callbacks[evt].push(callback);
         return this;

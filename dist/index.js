@@ -60,7 +60,7 @@ var interpret = function interpret(self, data) {
         var word = words[0] || [];
         var letter = word[0];
         var arg = word[1];
-        var cmd = (letter + arg).replace('.', '_');
+        var cmd = letter + arg;
         var args = {};
 
         if (_lodash2.default.includes(['G', 'M'], letter)) {
@@ -80,6 +80,11 @@ var interpret = function interpret(self, data) {
                 args = _lodash2.default.zipObject(words); // returns an object composed from arrays of property names and values.
             }
 
+        if (typeof self.handlers[cmd] === 'function') {
+            var func = self.handlers[cmd];
+            func(args);
+        }
+
         if (typeof self[cmd] === 'function') {
             var func = self[cmd].bind(self);
             func(args);
@@ -88,14 +93,20 @@ var interpret = function interpret(self, data) {
 };
 
 var GCodeInterpreter = (function () {
-    function GCodeInterpreter() {
+    function GCodeInterpreter(options) {
         _classCallCheck(this, GCodeInterpreter);
 
         this.cmd = '';
+        this.handlers = {};
         this._callbacks = {
             'data': [],
             'end': []
         };
+
+        options = options || {};
+        options.handlers = options.handlers || {};
+
+        this.handlers = options.handlers;
     }
 
     _createClass(GCodeInterpreter, [{
