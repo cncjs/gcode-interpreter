@@ -1,6 +1,6 @@
 {
   "name": "gcode-interpreter",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A G-code interpreter for Node.js",
   "author": "Cheton Wu <cheton@gmail.com>",
   "homepage": "https://github.com/cheton/gcode-interpreter",
@@ -25,7 +25,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "gcode-parser": "^0.5.0",
-    "lodash": "^3.10.1"
+    "lodash": "^4.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",
