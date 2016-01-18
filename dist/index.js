@@ -65,7 +65,7 @@ var interpret = function interpret(self, data) {
 
         if (_lodash2.default.includes(['G', 'M'], letter)) {
             self.cmd = cmd;
-            args = _lodash2.default.zipObject(words.slice(1)); // returns an object composed from arrays of property names and values
+            args = _lodash2.default.fromPairs(words.slice(1)); // returns an object composed from arrays of property names and values
         } else {
                 // Use the same command if the line does not start with Gxx or Mxx.
                 // For example:
@@ -77,7 +77,7 @@ var interpret = function interpret(self, data) {
                 //  X0. Y-0.5 I-0.5 J0.
                 //  X-0.5 Y0. I0. J0.5
                 cmd = self.cmd;
-                args = _lodash2.default.zipObject(words); // returns an object composed from arrays of property names and values.
+                args = _lodash2.default.fromPairs(words); // returns an object composed from arrays of property names and values.
             }
 
         if (typeof self.handlers[cmd] === 'function') {
