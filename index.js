@@ -43,7 +43,7 @@ const interpret = (self, data) => {
 
         if (_.includes(['G', 'M'], letter)) {
             self.cmd = cmd;
-            args = _.zipObject(words.slice(1)); // returns an object composed from arrays of property names and values
+            args = _.fromPairs(words.slice(1)); // returns an object composed from arrays of property names and values
         } else {
             // Use the same command if the line does not start with Gxx or Mxx.
             // For example:
@@ -55,7 +55,7 @@ const interpret = (self, data) => {
             //  X0. Y-0.5 I-0.5 J0.
             //  X-0.5 Y0. I0. J0.5
             cmd = self.cmd;
-            args = _.zipObject(words); // returns an object composed from arrays of property names and values.
+            args = _.fromPairs(words); // returns an object composed from arrays of property names and values.
         }
 
         if (typeof self.handlers[cmd] === 'function') {
