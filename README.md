@@ -122,3 +122,6 @@ G2 { X: -0.5, Y: 0, I: 0, J: 0.5 }
 G1 { Z: 0.1, F: 5 }
 G0 { X: 0, Y: 0, Z: 0.25 }
 ```
+
+## Toolpath Generator
+Check out [gcode-toolpath](https://github.com/cheton/gcode-toolpath/blob/master/src/index.js) for an example.
