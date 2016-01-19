@@ -124,4 +124,4 @@ G0 { X: 0, Y: 0, Z: 0.25 }
 ```
 
 ## Toolpath Generator
-Check out [gcode-toolpath](https://github.com/cheton/gcode-toolpath/blob/master/src/index.js) for an example.
+Check out [gcode-toolpath](https://github.com/cheton/gcode-toolpath) for an example.
