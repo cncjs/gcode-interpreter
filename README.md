@@ -62,46 +62,60 @@ const GCODE = [
     'N11 G00 X0. Y0. Z0.25'
 ].join('\n');
 
-class GCodeRunner extends GCodeInterpreter {
-    G17() {
-        console.log('G17');
-    }
-    G20() {
-        console.log('G20');
-    }
-    G90() {
-        console.log('G90');
-    }
-    G94() {
-        console.log('G94');
-    }
-    G54() {
-        console.log('G54');
-    }
-    G0(args) {
-        console.log('G0', args);
-    }
-    G1(args) {
-        console.log('G1', args);
-    }
-    G2(args) {
-        console.log('G2', args);
+class GCodeToolpath {
+    handlers = {
+        'G0': (params) => {
+            console.log('G0', params);
+        },
+        'G1': (params) => {
+            console.log('G1', params);
+        },
+        'G2': (params) => {
+            console.log('G2', params);
+        },
+        'G17': (params) => {
+            console.log('G17');
+        },
+        'G20': (params) => {
+            console.log('G20');
+        },
+        'G90': (params) => {
+            console.log('G90');
+        },
+        'G94': (params) => {
+            console.log('G94');
+        },
+        'G54': (params) => {
+            console.log('G54');
+        }
+    };
+
+    constructor(options) {
+        options = options || {};
+
+        return new GCodeInterpreter({ handlers: this.handlers });
     }
 }
 
-let runner = new GCodeRunner();
+const toolpath = new GCodeToolpath();
 
-// optional event callbacks
-runner
+// optional event listeners
+toolpath
+    .interpretString(GCODE, (err, results) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+    })
     .on('data', (data) => {
-        // 'data' event callback
+        // 'data' event listener
+    })
+    .on('progress', ({ current, total }) => {
+        // 'progress' event listener
     })
     .on('end', (results) => {
-        // 'end' event callback
+        // 'end' event listener
     });
-
-runner.interpretString(GCODE, (err, results) => {
-});
 ```
 
 and you will see the output as below:
