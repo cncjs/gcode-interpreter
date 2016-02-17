@@ -26,19 +26,19 @@ var GCodeRunner = function() {
 
 var runner = new GCodeRunner()
 
-// Interpret G-code from file
+// Load G-code from file
 var file = 'example.nc';
-runner.interpretFile(file, function(err, data) {
+runner.loadFromFile(file, function(err, data) {
 });
 
-// Interpret G-code from stream
+// Load G-code from stream
 var stream = fs.createReadStream(file, { encoding: 'utf8' });
-runner.interpretStream(stream, function(err, data) {
+runner.loadFromStream(stream, function(err, data) {
 });
 
-// Interpret G-code from string
+// Load G-code from string
 var str = fs.readFileSync(file, 'utf8');
-runner.interpretString(str, function(err, data) {
+runner.loadFromString(str, function(err, data) {
 });
 ```
 
@@ -100,7 +100,7 @@ class GCodeToolpath {
 const toolpath = new GCodeToolpath();
 
 toolpath
-    .interpretString(GCODE, (err, results) => {
+    .loadFromString(GCODE, (err, results) => {
         if (err) {
             console.error(err);
             return;
