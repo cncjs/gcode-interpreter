@@ -17,14 +17,16 @@
     "gcode"
   ],
   "scripts": {
-    "test": "gulp && gulp test",
+    "prepublish": "npm run build && npm test",
+    "build": "gulp",
+    "test": "gulp test",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --require babel-core/register -R spec",
     "coverage-clean": "rm -rf ./coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "dependencies": {
-    "gcode-parser": "^0.6.0",
+    "gcode-parser": "^0.7.0",
     "lodash": "^4.0.0"
   },
   "devDependencies": {
