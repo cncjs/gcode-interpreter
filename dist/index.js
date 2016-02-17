@@ -1,11 +1,11 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.GCodeInterpreter = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _lodash = require('lodash');
 
@@ -25,9 +25,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var streamify = function streamify(text) {
+var streamify = function streamify(str) {
     var s = new _stream2.default.Readable();
-    s.push(text);
+    s.push(str);
     s.push(null);
     return s;
 };
@@ -156,9 +156,9 @@ var GCodeInterpreter = function () {
             return this.interpretStream(s, callback);
         }
     }, {
-        key: 'interpretText',
-        value: function interpretText(text, callback) {
-            var s = streamify(text);
+        key: 'interpretString',
+        value: function interpretString(str, callback) {
+            var s = streamify(str);
             return this.interpretStream(s, callback);
         }
     }]);
