@@ -15,8 +15,8 @@ describe('G-code Interpreter', (done) => {
         }
 
         let runner = new GCodeRunner();
-        it('should call interpretText\'s callback.', (done) => {
-            runner.interpretText(null, (err, results) => {
+        it('should call interpretString\'s callback.', (done) => {
+            runner.interpretString(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
