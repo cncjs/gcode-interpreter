@@ -99,7 +99,6 @@ class GCodeToolpath {
 
 const toolpath = new GCodeToolpath();
 
-// optional event listeners
 toolpath
     .interpretString(GCODE, (err, results) => {
         if (err) {
