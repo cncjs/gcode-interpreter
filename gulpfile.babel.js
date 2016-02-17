@@ -6,7 +6,7 @@ import istanbul from 'gulp-istanbul';
 import mocha from 'gulp-mocha';
 
 gulp.task('pre-test', () => {
-    return gulp.src(['dist/index.js'])
+    return gulp.src(['lib/index.js'])
         // Covering files
         .pipe(istanbul())
         // Force `require` to return covered files
@@ -33,10 +33,10 @@ gulp.task('test', ['pre-test'], () => {
 
 gulp.task('default', () => {
     return gulp.src([
-            'index.js'
+            'src/index.js'
         ])
         .pipe(babel({
             presets: ['es2015', 'stage-0']
         }))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('lib'));
 });
