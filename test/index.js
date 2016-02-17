@@ -15,20 +15,20 @@ describe('G-code Interpreter', (done) => {
         }
 
         let runner = new GCodeRunner();
-        it('should call interpretString\'s callback.', (done) => {
-            runner.interpretString(null, (err, results) => {
+        it('should call loadFromString\'s callback.', (done) => {
+            runner.loadFromString(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
         });
-        it('should call interpretFile\'s callback.', (done) => {
-            runner.interpretFile(null, (err, results) => {
+        it('should call loadFromFile\'s callback.', (done) => {
+            runner.loadFromFile(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
         });
-        it('should call interpretStream\'s callback.', (done) => {
-            runner.interpretStream(null, (err, results) => {
+        it('should call loadFromStream\'s callback.', (done) => {
+            runner.loadFromStream(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
@@ -58,7 +58,7 @@ describe('G-code Interpreter', (done) => {
             });
 
         it('should call event callbacks.', (done) => {
-            runner.interpretFile('test/fixtures/circle.nc', (err, results) => {
+            runner.loadFromFile('test/fixtures/circle.nc', (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
@@ -87,7 +87,7 @@ describe('G-code Interpreter', (done) => {
                     };
 
                     let interpreter = new GCodeInterpreter({ handlers: handlers })
-                    interpreter.interpretFile(file, callback);
+                    interpreter.loadFromFile(file, callback);
 
                     return interpreter;
                 }
@@ -127,7 +127,7 @@ describe('G-code Interpreter', (done) => {
 
         it('should call each function with the expected number of times.', (done) => {
             let runner = new GCodeRunner();
-            runner.interpretFile('test/fixtures/circle.nc', (err, results) => {
+            runner.loadFromFile('test/fixtures/circle.nc', (err, results) => {
                 expect(calls.G0).to.equal(2);
                 expect(calls.G1).to.equal(1);
                 expect(calls.G2).to.equal(4);
@@ -174,7 +174,7 @@ describe('G-code Interpreter', (done) => {
 
         it('should call each function with the expected number of times.', (done) => {
             let runner = new GCodeRunner();
-            runner.interpretFile('test/fixtures/one-inch-circle.nc', (err, results) => {
+            runner.loadFromFile('test/fixtures/one-inch-circle.nc', (err, results) => {
                 expect(calls.G0).to.equal(4);
                 expect(calls.G1).to.equal(2);
                 expect(calls.G2).to.equal(4);
