@@ -36,9 +36,9 @@ var stream = fs.createReadStream(file, { encoding: 'utf8' });
 runner.interpretStream(stream, function(err, data) {
 });
 
-// Interpret G-code from text string
-var text = fs.readFileSync(file, 'utf8');
-runner.interpretText(text, function(err, data) {
+// Interpret G-code from string
+var str = fs.readFileSync(file, 'utf8');
+runner.interpretString(str, function(err, data) {
 });
 ```
 
@@ -48,7 +48,7 @@ Run this example with babel-node:
 ```js
 import { GCodeInterpreter } from 'gcode-interpreter';
 
-const GCODE_TEXT = [
+const GCODE = [
     'N1 G17 G20 G90 G94 G54',
     'N2 G0 Z0.25',
     'N3 X-0.5 Y0.',
@@ -100,7 +100,7 @@ runner
         // 'end' event callback
     });
 
-runner.interpretText(GCODE_TEXT, (err, results) => {
+runner.interpretString(GCODE, (err, results) => {
 });
 ```
 
