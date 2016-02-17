@@ -3,9 +3,9 @@ import fs from 'fs';
 import stream from 'stream';
 import { GCodeParser } from 'gcode-parser';
 
-const streamify = (text) => {
+const streamify = (str) => {
     let s = new stream.Readable();
-    s.push(text);
+    s.push(str);
     s.push(null);
     return s;
 };
@@ -125,8 +125,8 @@ class GCodeInterpreter {
         s.on('error', callback);
         return this.interpretStream(s, callback);
     }
-    interpretText(text, callback) {
-        let s = streamify(text);
+    interpretString(str, callback) {
+        let s = streamify(str);
         return this.interpretStream(s, callback);
     }
 }
