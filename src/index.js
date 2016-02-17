@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import events from 'events';
 import fs from 'fs';
 import stream from 'stream';
 import { GCodeParser } from 'gcode-parser';
@@ -70,24 +71,17 @@ const interpret = (self, data) => {
     });
 };
 
-class GCodeInterpreter {
+class GCodeInterpreter extends events.EventEmitter {
     cmd = '';
     handlers = {};
 
-    _callbacks = {
-        'data': [],
-        'end': []
-    };
-
     constructor(options) {
+        super();
+
         options = options || {};
         options.handlers = options.handlers || {};
 
         this.handlers = options.handlers;
-    }
-    on(evt, callback) {
-        this._callbacks[evt] && this._callbacks[evt].push(callback);
-        return this;
     }
     interpretStream(stream, callback) {
         callback = callback || (() => {});
@@ -96,16 +90,15 @@ class GCodeInterpreter {
             let results = [];
             stream.pipe(new GCodeParser())
                 .on('data', (data) => {
-                    this._callbacks['data'].forEach((f) => {
-                        f(data);
-                    });
+                    this.emit('data', data);
                     results.push(data);
                     interpret(this, data);
                 })
+                .on('progress', ({ current, total }) => {
+                    this.emit('progress', { current, total });
+                })
                 .on('end', () => {
-                    this._callbacks['end'].forEach((f) => {
-                        f(results);
-                    });
+                    this.emit('end', results);
                     callback(null, results);
                 })
                 .on('error', (err) => {
