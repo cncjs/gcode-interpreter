@@ -4,6 +4,8 @@ import fs from 'fs';
 import stream from 'stream';
 import { GCodeParser } from 'gcode-parser';
 
+const noop = () => {};
+
 const streamify = (str) => {
     let s = new stream.Readable();
     s.push(str);
@@ -83,7 +85,7 @@ class GCodeInterpreter extends events.EventEmitter {
 
         this.handlers = options.handlers;
     }
-    interpretStream(stream, callback) {
+    loadFromStream(stream, callback = noop) {
         callback = callback || (() => {});
 
         try {
@@ -112,15 +114,15 @@ class GCodeInterpreter extends events.EventEmitter {
 
         return this;
     }
-    interpretFile(file, callback) {
+    loadFromFile(file, callback = noop) {
         file = file || '';
         let s = fs.createReadStream(file, { encoding: 'utf8' });
         s.on('error', callback);
-        return this.interpretStream(s, callback);
+        return this.loadFromStream(s, callback);
     }
-    interpretString(str, callback) {
+    loadFromString(str, callback = noop) {
         let s = streamify(str);
-        return this.interpretStream(s, callback);
+        return this.loadFromStream(s, callback);
     }
 }
 
