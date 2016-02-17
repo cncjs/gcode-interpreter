@@ -1,6 +1,6 @@
 import chai from 'chai';
 import fs from 'fs';
-import { GCodeInterpreter } from '../dist/';
+import { GCodeInterpreter } from '../lib/';
 import _ from 'lodash';
 
 const expect = chai.expect;
@@ -42,10 +42,16 @@ describe('G-code Interpreter', (done) => {
             }
         }
 
+        let index = 0;
         let runner = new GCodeRunner();
         runner
             .on('data', (data) => {
                 expect(data).to.be.an('object');
+            })
+            .on('progress', ({ current, total }) => {
+                expect(current).to.be.equal(index);
+                expect(total).to.be.equal(7);
+                ++index;
             })
             .on('end', (results) => {
                 expect(results).to.be.an('array');
