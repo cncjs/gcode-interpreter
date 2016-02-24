@@ -1,6 +1,6 @@
 {
   "name": "gcode-interpreter",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "A G-code interpreter for Node.js",
   "author": "Cheton Wu <cheton@gmail.com>",
   "homepage": "https://github.com/cheton/gcode-interpreter",
