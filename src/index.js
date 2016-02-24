@@ -1,17 +1,8 @@
 import _ from 'lodash';
 import events from 'events';
-import fs from 'fs';
-import stream from 'stream';
-import { GCodeParser } from 'gcode-parser';
+import { parseFile, parseStream, parseString } from 'gcode-parser';
 
 const noop = () => {};
-
-const streamify = (str) => {
-    let s = new stream.Readable();
-    s.push(str);
-    s.push(null);
-    return s;
-};
 
 const partitionWordsByGroup = (words) => {
     let groups = [];
@@ -86,43 +77,25 @@ class GCodeInterpreter extends events.EventEmitter {
         this.handlers = options.handlers;
     }
     loadFromStream(stream, callback = noop) {
-        callback = callback || (() => {});
-
-        try {
-            let results = [];
-            stream.pipe(new GCodeParser())
-                .on('data', (data) => {
-                    this.emit('data', data);
-                    results.push(data);
-                    interpret(this, data);
-                })
-                .on('progress', ({ current, total }) => {
-                    this.emit('progress', { current, total });
-                })
-                .on('end', () => {
-                    this.emit('end', results);
-                    callback(null, results);
-                })
-                .on('error', (err) => {
-                    callback(err);
-                });
-        }
-        catch(err) {
-            callback(err);
-            return this;
-        }
-
-        return this;
+        let s = parseStream(stream, callback);
+        s.on('data', (data) => {
+            interpret(this, data);
+        });
+        return s;
     }
     loadFromFile(file, callback = noop) {
-        file = file || '';
-        let s = fs.createReadStream(file, { encoding: 'utf8' });
-        s.on('error', callback);
-        return this.loadFromStream(s, callback);
+        let s = parseFile(file, callback);
+        s.on('data', (data) => {
+            interpret(this, data);
+        });
+        return s;
     }
     loadFromString(str, callback = noop) {
-        let s = streamify(str);
-        return this.loadFromStream(s, callback);
+        let s = parseString(str, callback);
+        s.on('data', (data) => {
+            interpret(this, data);
+        });
+        return s;
     }
 }
 
