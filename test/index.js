@@ -17,51 +17,77 @@ describe('G-code Interpreter', (done) => {
         let runner = new GCodeRunner();
         it('should call loadFromString\'s callback.', (done) => {
             runner.loadFromString(null, (err, results) => {
-                expect(err).to.be.okay;
+                expect(err).to.be.equal(null);
                 done();
             });
         });
         it('should call loadFromFile\'s callback.', (done) => {
             runner.loadFromFile(null, (err, results) => {
-                expect(err).to.be.okay;
+                expect(err).not.to.equal(null);
                 done();
             });
         });
         it('should call loadFromStream\'s callback.', (done) => {
             runner.loadFromStream(null, (err, results) => {
-                expect(err).to.be.okay;
+                expect(err).not.to.equal(null);
                 done();
             });
         });
     });
 
-    describe('Event callbacks', (done) => {
-        class GCodeRunner extends GCodeInterpreter {
-            constructor(options) {
-                super(options);
-            }
-        }
+    describe('Event listeners', (done) => {
+        it('should call event listeners when loading G-code from file.', (done) => {
+            const file = 'test/fixtures/circle.nc';
+            const runner = new GCodeInterpreter();
 
-        let index = 0;
-        let runner = new GCodeRunner();
-        runner
-            .on('data', (data) => {
-                expect(data).to.be.an('object');
-            })
-            .on('progress', ({ current, total }) => {
-                expect(current).to.be.equal(index);
-                expect(total).to.be.equal(7);
-                ++index;
-            })
-            .on('end', (results) => {
-                expect(results).to.be.an('array');
-            });
+            runner
+                .loadFromFile(file, (err, results) => {
+                    expect(err).to.be.okay;
+                    done();
+                })
+                .on('data', (data) => {
+                    expect(data).to.be.an('object');
+                })
+                .on('end', (results) => {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be.equal(7);
+                });
+        });
 
-        it('should call event callbacks.', (done) => {
-            runner.loadFromFile('test/fixtures/circle.nc', (err, results) => {
-                expect(err).to.be.okay;
-                done();
-            });
+        it('should call event listeners when loading G-code from stream.', (done) => {
+            const stream = fs.createReadStream('test/fixtures/circle.nc');
+            const runner = new GCodeInterpreter();
+
+            runner
+                .loadFromStream(stream, (err, results) => {
+                    expect(err).to.be.okay;
+                    done();
+                })
+                .on('data', (data) => {
+                    expect(data).to.be.an('object');
+                })
+                .on('end', (results) => {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be.equal(7);
+                });
+        });
+
+        it('should call event listeners when loading G-code from string.', (done) => {
+            const string = fs.readFileSync('test/fixtures/circle.nc', 'utf8');
+            const runner = new GCodeInterpreter();
+
+            runner
+                .loadFromString(string, (err, results) => {
+                    expect(err).to.be.okay;
+                    done();
+                })
+                .on('data', (data) => {
+                    expect(data).to.be.an('object');
+                })
+                .on('end', (results) => {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be.equal(7);
+                });
         });
     });
 
