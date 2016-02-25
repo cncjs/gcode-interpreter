@@ -109,9 +109,6 @@ toolpath
     .on('data', (data) => {
         // 'data' event listener
     })
-    .on('progress', ({ current, total }) => {
-        // 'progress' event listener
-    })
     .on('end', (results) => {
         // 'end' event listener
     });
