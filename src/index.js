@@ -68,8 +68,6 @@ class GCodeInterpreter {
     handlers = {};
 
     constructor(options) {
-        super();
-
         options = options || {};
         options.handlers = options.handlers || {};
 
