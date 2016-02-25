@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import events from 'events';
 import { parseFile, parseStream, parseString } from 'gcode-parser';
 
 const noop = () => {};
@@ -64,7 +63,7 @@ const interpret = (self, data) => {
     });
 };
 
-class GCodeInterpreter extends events.EventEmitter {
+class GCodeInterpreter {
     cmd = '';
     handlers = {};
 
