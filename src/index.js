@@ -1,42 +1,60 @@
-import _ from 'lodash';
 import { parseFile, parseStream, parseString } from 'gcode-parser';
 
 const noop = () => {};
 
-const partitionWordsByGroup = (words) => {
-    let groups = [];
+/**
+ * fromPairs([['a', 1], ['b', 2]]);
+ * // => { 'a': 1, 'b': 2 }
+ */
+const fromPairs = (pairs) => {
+    let index = -1;
+    const length = (!pairs) ? 0 : pairs.length;
+    const result = {};
 
-    _.each(words, (word) => {
-        let letter = word[0];
-        let argument = word[1];
+    while (++index < length) {
+        const pair = pairs[index];
+        result[pair[0]] = pair[1];
+    }
 
-        if (_.includes(['G', 'M'], letter)) {
+    return result;
+};
+
+const partitionWordsByGroup = (words = []) => {
+    const groups = [];
+
+    for (let i = 0; i < words.length; ++i) {
+        const word = words[i];
+        const letter = word[0];
+
+        if ((letter === 'G') || (letter === 'M')) {
             groups.push([word]);
-            return;
+            continue;
         }
 
-        if (_.size(groups) > 0) {
+        if (groups.length > 0) {
             groups[groups.length - 1].push(word);
         } else {
             groups.push([word]);
         }
-    });
+    }
 
     return groups;
 };
 
 const interpret = (self, data) => {
-    let groups = partitionWordsByGroup(data.words);
-    _.each(groups, (words) => {
-        let word = words[0] || [];
-        let letter = word[0];
-        let arg = word[1];
+    const groups = partitionWordsByGroup(data.words);
+
+    for (let i = 0; i < groups.length; ++i) {
+        const words = groups[i];
+        const word = words[0] || [];
+        const letter = word[0];
+        const arg = word[1];
         let cmd = (letter + arg);
         let args = {};
 
-        if (_.includes(['G', 'M'], letter)) {
+        if ((letter === 'G') || (letter === 'M')) {
             self.cmd = cmd;
-            args = _.fromPairs(words.slice(1)); // returns an object composed from arrays of property names and values
+            args = fromPairs(words.slice(1)); // returns an object composed from arrays of property names and values
         } else {
             // Use the same command if the line does not start with Gxx or Mxx.
             // For example:
@@ -48,19 +66,19 @@ const interpret = (self, data) => {
             //  X0. Y-0.5 I-0.5 J0.
             //  X-0.5 Y0. I0. J0.5
             cmd = self.cmd;
-            args = _.fromPairs(words); // returns an object composed from arrays of property names and values.
+            args = fromPairs(words); // returns an object composed from arrays of property names and values.
         }
 
         if (typeof self.handlers[cmd] === 'function') {
-            let func = self.handlers[cmd];
+            const func = self.handlers[cmd];
             func(args);
         }
 
         if (typeof self[cmd] === 'function') {
-            let func = self[cmd].bind(self);
+            const func = self[cmd].bind(self);
             func(args);
         }
-    });
+    }
 };
 
 class GCodeInterpreter {
@@ -74,21 +92,21 @@ class GCodeInterpreter {
         this.handlers = options.handlers;
     }
     loadFromStream(stream, callback = noop) {
-        let s = parseStream(stream, callback);
+        const s = parseStream(stream, callback);
         s.on('data', (data) => {
             interpret(this, data);
         });
         return s;
     }
     loadFromFile(file, callback = noop) {
-        let s = parseFile(file, callback);
+        const s = parseFile(file, callback);
         s.on('data', (data) => {
             interpret(this, data);
         });
         return s;
     }
     loadFromString(str, callback = noop) {
-        let s = parseString(str, callback);
+        const s = parseString(str, callback);
         s.on('data', (data) => {
             interpret(this, data);
         });
