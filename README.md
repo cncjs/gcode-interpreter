@@ -1,6 +1,6 @@
 # gcode-interpreter [![build status](https://travis-ci.org/cheton/gcode-interpreter.svg?branch=master)](https://travis-ci.org/cheton/gcode-interpreter) [![Coverage Status](https://coveralls.io/repos/cheton/gcode-interpreter/badge.svg?branch=master&service=github)](https://coveralls.io/github/cheton/gcode-interpreter?branch=master)
 
-[![NPM](https://nodei.co/npm/gcode-interpreter.png?downloads=true&stars=true)](https://nodei.co/npm/gcode-interpreter/)
+[![NPM](https://nodei.co/npm/gcode-interpreter.png?downloads=true&stars=true)](https://www.npmjs.com/package/gcode-interpreter)
 
 ## Install
 
