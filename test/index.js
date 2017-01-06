@@ -1,20 +1,19 @@
 import chai from 'chai';
 import fs from 'fs';
 import { GCodeInterpreter } from '../lib/';
-import _ from 'lodash';
 
 const expect = chai.expect;
 const should = chai.should();
 
-describe('G-code Interpreter', (done) => {
-    describe('Pass a null value as the first argument', (done) => {
+describe('G-code Interpreter', () => {
+    describe('Pass a null value as the first argument', () => {
         class GCodeRunner extends GCodeInterpreter {
             constructor(options) {
                 super(options);
             }
         }
 
-        let runner = new GCodeRunner();
+        const runner = new GCodeRunner();
         it('should call loadFromString\'s callback.', (done) => {
             runner.loadFromString(null, (err, results) => {
                 expect(err).to.be.equal(null);
@@ -35,7 +34,7 @@ describe('G-code Interpreter', (done) => {
         });
     });
 
-    describe('Event listeners', (done) => {
+    describe('Event listeners', () => {
         it('should call event listeners when loading G-code from file.', (done) => {
             const file = 'test/fixtures/circle.nc';
             const runner = new GCodeInterpreter();
@@ -91,9 +90,9 @@ describe('G-code Interpreter', (done) => {
         });
     });
 
-    describe('G-code: circle (calls GCodeInterpreter)', (done) => {
+    describe('G-code: circle (calls GCodeInterpreter)', () => {
         it('should call each function with the expected number of times.', (done) => {
-            let calls = {};
+            const calls = {};
 
             class GCodeRunner {
                 loadFile(file, callback) {
@@ -112,7 +111,7 @@ describe('G-code Interpreter', (done) => {
                         }
                     };
 
-                    let interpreter = new GCodeInterpreter({ handlers: handlers })
+                    const interpreter = new GCodeInterpreter({ handlers: handlers })
                     interpreter.loadFromFile(file, callback);
 
                     return interpreter;
@@ -130,8 +129,8 @@ describe('G-code Interpreter', (done) => {
     });
 
 
-    describe('G-code: circle (extends GCodeInterpreter)', (done) => {
-        let calls = {};
+    describe('G-code: circle (extends GCodeInterpreter)', () => {
+        const calls = {};
 
         class GCodeRunner extends GCodeInterpreter {
             constructor(options) {
@@ -152,7 +151,7 @@ describe('G-code Interpreter', (done) => {
         }
 
         it('should call each function with the expected number of times.', (done) => {
-            let runner = new GCodeRunner();
+            const runner = new GCodeRunner();
             runner.loadFromFile('test/fixtures/circle.nc', (err, results) => {
                 expect(calls.G0).to.equal(2);
                 expect(calls.G1).to.equal(1);
@@ -162,8 +161,8 @@ describe('G-code Interpreter', (done) => {
         });
     });
 
-    describe('G-code: 1 inch circle', (done) => {
-        let calls = {};
+    describe('G-code: 1 inch circle', () => {
+        const calls = {};
 
         class GCodeRunner extends GCodeInterpreter {
             constructor(options) {
@@ -199,7 +198,7 @@ describe('G-code Interpreter', (done) => {
         }
 
         it('should call each function with the expected number of times.', (done) => {
-            let runner = new GCodeRunner();
+            const runner = new GCodeRunner();
             runner.loadFromFile('test/fixtures/one-inch-circle.nc', (err, results) => {
                 expect(calls.G0).to.equal(4);
                 expect(calls.G1).to.equal(2);
