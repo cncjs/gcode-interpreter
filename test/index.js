@@ -88,6 +88,25 @@ describe('G-code Interpreter', () => {
                     expect(results.length).to.be.equal(7);
                 });
         });
+
+        it('loadFromFileSync() should return expected result.', (done) => {
+            const file = 'test/fixtures/circle.nc';
+            const runner = new GCodeInterpreter();
+            const results = runner.loadFromFileSync(file);
+            expect(results).to.be.an('array');
+            expect(results.length).to.be.equal(7);
+            done();
+        });
+
+        it('loadFromStringSync() should return expected result.', (done) => {
+            const file = 'test/fixtures/circle.nc';
+            const string = fs.readFileSync(file, 'utf8');
+            const runner = new GCodeInterpreter();
+            const results = runner.loadFromStringSync(string);
+            expect(results).to.be.an('array');
+            expect(results.length).to.be.equal(7);
+            done();
+        });
     });
 
     describe('G-code: circle (calls GCodeInterpreter)', () => {
@@ -125,9 +144,7 @@ describe('G-code Interpreter', () => {
                 done();
             });
         });
-
     });
-
 
     describe('G-code: circle (extends GCodeInterpreter)', () => {
         const calls = {};
@@ -151,13 +168,18 @@ describe('G-code Interpreter', () => {
         }
 
         it('should call each function with the expected number of times.', (done) => {
+            const file = 'test/fixtures/circle.nc';
+            const string = fs.readFileSync(file, 'utf8');
             const runner = new GCodeRunner();
-            runner.loadFromFile('test/fixtures/circle.nc', (err, results) => {
-                expect(calls.G0).to.equal(2);
-                expect(calls.G1).to.equal(1);
-                expect(calls.G2).to.equal(4);
-                done();
-            });
+            runner.loadFromFileSync(file);
+            expect(calls.G0).to.equal(2);
+            expect(calls.G1).to.equal(1);
+            expect(calls.G2).to.equal(4);
+            runner.loadFromStringSync(string);
+            expect(calls.G0).to.equal(2 * 2);
+            expect(calls.G1).to.equal(1 * 2);
+            expect(calls.G2).to.equal(4 * 2);
+            done();
         });
     });
 
@@ -198,13 +220,18 @@ describe('G-code Interpreter', () => {
         }
 
         it('should call each function with the expected number of times.', (done) => {
+            const file = 'test/fixtures/one-inch-circle.nc';
+            const string = fs.readFileSync(file, 'utf8');
             const runner = new GCodeRunner();
-            runner.loadFromFile('test/fixtures/one-inch-circle.nc', (err, results) => {
-                expect(calls.G0).to.equal(4);
-                expect(calls.G1).to.equal(2);
-                expect(calls.G2).to.equal(4);
-                done();
-            });
+            runner.loadFromFileSync(file);
+            expect(calls.G0).to.equal(4);
+            expect(calls.G1).to.equal(2);
+            expect(calls.G2).to.equal(4);
+            runner.loadFromStringSync(string);
+            expect(calls.G0).to.equal(4 * 2);
+            expect(calls.G1).to.equal(2 * 2);
+            expect(calls.G2).to.equal(4 * 2);
+            done();
         });
     });
 
