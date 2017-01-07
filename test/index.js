@@ -90,19 +90,27 @@ describe('G-code Interpreter', () => {
         });
 
         it('loadFromFileSync() should return expected result.', (done) => {
+            let i = 0;
             const file = 'test/fixtures/circle.nc';
             const runner = new GCodeInterpreter();
-            const results = runner.loadFromFileSync(file);
+            const results = runner.loadFromFileSync(file, (data, index) => {
+                expect(i).to.be.equal(index);
+                ++i;
+            });
             expect(results).to.be.an('array');
             expect(results.length).to.be.equal(7);
             done();
         });
 
         it('loadFromStringSync() should return expected result.', (done) => {
+            let i = 0;
             const file = 'test/fixtures/circle.nc';
             const string = fs.readFileSync(file, 'utf8');
             const runner = new GCodeInterpreter();
-            const results = runner.loadFromStringSync(string);
+            const results = runner.loadFromStringSync(string, (data, index) => {
+                expect(i).to.be.equal(index);
+                ++i;
+            });
             expect(results).to.be.an('array');
             expect(results.length).to.be.equal(7);
             done();
