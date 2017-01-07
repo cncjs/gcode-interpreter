@@ -111,10 +111,11 @@ class GCodeInterpreter {
         });
         return s;
     }
-    loadFromFileSync(file) {
+    loadFromFileSync(file, callback = noop) {
         const list = parseFileSync(file);
         for (let i = 0; i < list.length; ++i) {
             interpret(this, list[i]);
+            callback(list[i], i);
         }
         return list;
     }
@@ -125,10 +126,11 @@ class GCodeInterpreter {
         });
         return s;
     }
-    loadFromStringSync(str) {
+    loadFromStringSync(str, callback = noop) {
         const list = parseStringSync(str);
         for (let i = 0; i < list.length; ++i) {
             interpret(this, list[i]);
+            callback(list[i], i);
         }
         return list;
     }
