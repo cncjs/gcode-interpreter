@@ -26,20 +26,25 @@ var GCodeRunner = function() {
 
 var runner = new GCodeRunner()
 
-// Load G-code from file
-var file = 'example.nc';
-runner.loadFromFile(file, function(err, data) {
-});
-
 // Load G-code from stream
 var stream = fs.createReadStream(file, { encoding: 'utf8' });
 runner.loadFromStream(stream, function(err, data) {
 });
 
-// Load G-code from string
-var str = fs.readFileSync(file, 'utf8');
-runner.loadFromString(str, function(err, data) {
+// loadFromFile
+var file = 'example.nc';
+runner.loadFromFile(file, function(err, data) {
 });
+
+// Synchronous version of loadFromFile
+var data = runner.loadFromFileSync(file);
+
+// loadFromString
+runner.loadFromString(fs.readFileSync(file, 'utf8'), function(err, data) {
+});
+
+// Synchronous version of loadFromString
+var data = runner.loadFromStringSync(file);
 ```
 
 ## Examples
