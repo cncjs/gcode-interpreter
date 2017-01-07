@@ -26,7 +26,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "gcode-parser": "^1.0.0"
+    "gcode-parser": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
