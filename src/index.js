@@ -1,4 +1,10 @@
-import { parseFile, parseStream, parseString } from 'gcode-parser';
+import {
+    parseStream,
+    parseFile,
+    parseFileSync,
+    parseString,
+    parseStringSync
+} from 'gcode-parser';
 
 const noop = () => {};
 
@@ -105,12 +111,26 @@ class GCodeInterpreter {
         });
         return s;
     }
+    loadFromFileSync(file) {
+        const list = parseFileSync(file);
+        for (let i = 0; i < list.length; ++i) {
+            interpret(this, list[i]);
+        }
+        return list;
+    }
     loadFromString(str, callback = noop) {
         const s = parseString(str, callback);
         s.on('data', (data) => {
             interpret(this, data);
         });
         return s;
+    }
+    loadFromStringSync(str) {
+        const list = parseStringSync(str);
+        for (let i = 0; i < list.length; ++i) {
+            interpret(this, list[i]);
+        }
+        return list;
     }
 }
 
