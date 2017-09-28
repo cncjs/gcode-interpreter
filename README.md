@@ -1,4 +1,4 @@
-# gcode-interpreter [![build status](https://travis-ci.org/cheton/gcode-interpreter.svg?branch=master)](https://travis-ci.org/cheton/gcode-interpreter) [![Coverage Status](https://coveralls.io/repos/cheton/gcode-interpreter/badge.svg?branch=master&service=github)](https://coveralls.io/github/cheton/gcode-interpreter?branch=master)
+# gcode-interpreter [![build status](https://travis-ci.org/cncjs/gcode-interpreter.svg?branch=master)](https://travis-ci.org/cncjs/gcode-interpreter) [![Coverage Status](https://coveralls.io/repos/cncjs/gcode-interpreter/badge.svg?branch=master&service=github)](https://coveralls.io/github/cncjs/gcode-interpreter?branch=master)
 
 [![NPM](https://nodei.co/npm/gcode-interpreter.png?downloads=true&stars=true)](https://www.npmjs.com/package/gcode-interpreter)
 
@@ -139,4 +139,4 @@ G0 { X: 0, Y: 0, Z: 0.25 }
 ```
 
 ## G-code Toolpath
-https://github.com/cheton/gcode-toolpath
+https://github.com/cncjs/gcode-toolpath
