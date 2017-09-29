@@ -140,3 +140,7 @@ G0 { X: 0, Y: 0, Z: 0.25 }
 
 ## G-code Toolpath
 https://github.com/cncjs/gcode-toolpath
+
+## License
+
+MIT
