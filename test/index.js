@@ -1,9 +1,6 @@
-import chai from 'chai';
+import { expect } from 'chai';
 import fs from 'fs';
 import { GCodeInterpreter } from '../lib/';
-
-const expect = chai.expect;
-const should = chai.should();
 
 describe('G-code Interpreter', () => {
     describe('Pass a null value as the first argument', () => {
@@ -41,7 +38,7 @@ describe('G-code Interpreter', () => {
 
             runner
                 .loadFromFile(file, (err, results) => {
-                    expect(err).to.be.okay;
+                    expect(err).to.be.null;
                     done();
                 })
                 .on('data', (data) => {
@@ -59,7 +56,7 @@ describe('G-code Interpreter', () => {
 
             runner
                 .loadFromStream(stream, (err, results) => {
-                    expect(err).to.be.okay;
+                    expect(err).to.be.null;
                     done();
                 })
                 .on('data', (data) => {
@@ -77,7 +74,7 @@ describe('G-code Interpreter', () => {
 
             runner
                 .loadFromString(string, (err, results) => {
-                    expect(err).to.be.okay;
+                    expect(err).to.be.null;
                     done();
                 })
                 .on('data', (data) => {
