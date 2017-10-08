@@ -9,10 +9,10 @@
 ## Usage
 
 ```js
-var GCodeInterpreter = require('gcode-interpreter').GCodeInterpreter;
+const Interpreter = require('gcode-interpreter');
 
-var GCodeRunner = function() {
-    var handlers = {
+const Runner = function() {
+    const handlers = {
         'G0': (args) => {
             console.log('G0', args);
         },
@@ -21,37 +21,39 @@ var GCodeRunner = function() {
         }
     };
 
-    return new GCodeInterpreter({ handlers: handlers })
+    return new Interpreter({ handlers: handlers })
 };
 
-var runner = new GCodeRunner()
+const runner = new Runner()
+const file = 'example.nc';
+const stream = fs.createReadStream(file, { encoding: 'utf8' });
+const content = fs.readFileSync(file, 'utf8');
 
 // Load G-code from stream
-var stream = fs.createReadStream(file, { encoding: 'utf8' });
 runner.loadFromStream(stream, function(err, data) {
 });
 
 // loadFromFile
-var file = 'example.nc';
 runner.loadFromFile(file, function(err, data) {
 });
 
 // Synchronous version of loadFromFile
-var data = runner.loadFromFileSync(file);
+runner.loadFromFileSync(file);
 
 // loadFromString
-runner.loadFromString(fs.readFileSync(file, 'utf8'), function(err, data) {
+const content = fs.readFileSync(file, 'utf8');
+runner.loadFromString(content, function(err, data) {
 });
 
 // Synchronous version of loadFromString
-var data = runner.loadFromStringSync(file);
+runner.loadFromStringSync(content);
 ```
 
 ## Examples
 
 Run this example with babel-node:
 ```js
-import { GCodeInterpreter } from 'gcode-interpreter';
+import Interpreter from 'gcode-interpreter';
 
 const GCODE = [
     'N1 G17 G20 G90 G94 G54',
@@ -67,7 +69,7 @@ const GCODE = [
     'N11 G00 X0. Y0. Z0.25'
 ].join('\n');
 
-class GCodeToolpath {
+class Toolpath {
     handlers = {
         'G0': (params) => {
             console.log('G0', params);
@@ -98,11 +100,11 @@ class GCodeToolpath {
     constructor(options) {
         options = options || {};
 
-        return new GCodeInterpreter({ handlers: this.handlers });
+        return new Interpreter({ handlers: this.handlers });
     }
 }
 
-const toolpath = new GCodeToolpath();
+const toolpath = new Toolpath();
 
 toolpath
     .loadFromString(GCODE, (err, results) => {

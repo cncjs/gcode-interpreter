@@ -1,16 +1,16 @@
 import { expect } from 'chai';
 import fs from 'fs';
-import { GCodeInterpreter } from '../lib/';
+import Interpreter from '../src/';
 
 describe('G-code Interpreter', () => {
     describe('Pass a null value as the first argument', () => {
-        class GCodeRunner extends GCodeInterpreter {
+        class Runner extends Interpreter {
             constructor(options) {
                 super(options);
             }
         }
 
-        const runner = new GCodeRunner();
+        const runner = new Runner();
         it('should call loadFromString\'s callback.', (done) => {
             runner.loadFromString(null, (err, results) => {
                 expect(err).to.be.equal(null);
@@ -34,7 +34,7 @@ describe('G-code Interpreter', () => {
     describe('Event listeners', () => {
         it('should call event listeners when loading G-code from file.', (done) => {
             const file = 'test/fixtures/circle.nc';
-            const runner = new GCodeInterpreter();
+            const runner = new Interpreter();
 
             runner
                 .loadFromFile(file, (err, results) => {
@@ -52,7 +52,7 @@ describe('G-code Interpreter', () => {
 
         it('should call event listeners when loading G-code from stream.', (done) => {
             const stream = fs.createReadStream('test/fixtures/circle.nc');
-            const runner = new GCodeInterpreter();
+            const runner = new Interpreter();
 
             runner
                 .loadFromStream(stream, (err, results) => {
@@ -70,7 +70,7 @@ describe('G-code Interpreter', () => {
 
         it('should call event listeners when loading G-code from string.', (done) => {
             const string = fs.readFileSync('test/fixtures/circle.nc', 'utf8');
-            const runner = new GCodeInterpreter();
+            const runner = new Interpreter();
 
             runner
                 .loadFromString(string, (err, results) => {
@@ -89,7 +89,7 @@ describe('G-code Interpreter', () => {
         it('loadFromFileSync() should return expected result.', (done) => {
             let i = 0;
             const file = 'test/fixtures/circle.nc';
-            const runner = new GCodeInterpreter();
+            const runner = new Interpreter();
             const results = runner.loadFromFileSync(file, (data, index) => {
                 expect(i).to.be.equal(index);
                 ++i;
@@ -103,7 +103,7 @@ describe('G-code Interpreter', () => {
             let i = 0;
             const file = 'test/fixtures/circle.nc';
             const string = fs.readFileSync(file, 'utf8');
-            const runner = new GCodeInterpreter();
+            const runner = new Interpreter();
             const results = runner.loadFromStringSync(string, (data, index) => {
                 expect(i).to.be.equal(index);
                 ++i;
@@ -114,11 +114,11 @@ describe('G-code Interpreter', () => {
         });
     });
 
-    describe('G-code: circle (calls GCodeInterpreter)', () => {
+    describe('G-code: circle', () => {
         it('should call each function with the expected number of times.', (done) => {
             const calls = {};
 
-            class GCodeRunner {
+            class Runner {
                 loadFile(file, callback) {
                     const handlers = {
                         'G0': (args) => {
@@ -135,14 +135,14 @@ describe('G-code Interpreter', () => {
                         }
                     };
 
-                    const interpreter = new GCodeInterpreter({ handlers: handlers })
+                    const interpreter = new Interpreter({ handlers: handlers })
                     interpreter.loadFromFile(file, callback);
 
                     return interpreter;
                 }
             };
 
-            new GCodeRunner().loadFile('test/fixtures/circle.nc', (err, results) => {
+            new Runner().loadFile('test/fixtures/circle.nc', (err, results) => {
                 expect(calls.G0).to.equal(2);
                 expect(calls.G1).to.equal(1);
                 expect(calls.G2).to.equal(4);
@@ -151,10 +151,10 @@ describe('G-code Interpreter', () => {
         });
     });
 
-    describe('G-code: circle (extends GCodeInterpreter)', () => {
+    describe('G-code: circle (extends Interpreter)', () => {
         const calls = {};
 
-        class GCodeRunner extends GCodeInterpreter {
+        class Runner extends Interpreter {
             constructor(options) {
                 super(options);
             }
@@ -175,7 +175,7 @@ describe('G-code Interpreter', () => {
         it('should call each function with the expected number of times.', (done) => {
             const file = 'test/fixtures/circle.nc';
             const string = fs.readFileSync(file, 'utf8');
-            const runner = new GCodeRunner();
+            const runner = new Runner();
             runner.loadFromFileSync(file);
             expect(calls.G0).to.equal(2);
             expect(calls.G1).to.equal(1);
@@ -191,7 +191,7 @@ describe('G-code Interpreter', () => {
     describe('G-code: 1 inch circle', () => {
         const calls = {};
 
-        class GCodeRunner extends GCodeInterpreter {
+        class Runner extends Interpreter {
             constructor(options) {
                 super(options);
             }
@@ -227,7 +227,7 @@ describe('G-code Interpreter', () => {
         it('should call each function with the expected number of times.', (done) => {
             const file = 'test/fixtures/one-inch-circle.nc';
             const string = fs.readFileSync(file, 'utf8');
-            const runner = new GCodeRunner();
+            const runner = new Runner();
             runner.loadFromFileSync(file);
             expect(calls.G0).to.equal(4);
             expect(calls.G1).to.equal(2);
