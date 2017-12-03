@@ -240,4 +240,72 @@ describe('G-code Interpreter', () => {
         });
     });
 
+    describe('G-code: T2Laser', () => {
+        class Runner extends Interpreter {
+            calls = {};
+
+            constructor(options) {
+                super(options);
+            }
+            M3(args) {
+                expect(args).to.be.an('object');
+                this.calls.M3 = (this.calls.M3 || 0) + 1;
+            }
+            M5(args) {
+                expect(args).to.be.an('object');
+                this.calls.M5 = (this.calls.M5 || 0) + 1;
+            }
+            M6(args) {
+                expect(args).to.be.an('object');
+                expect(args.T).to.equal(1);
+                this.calls.M6 = (this.calls.M6 || 0) + 1;
+            }
+            T(args) {
+                expect(args).to.be.an('number');
+                expect(args).to.equal(2);
+                this.calls.T = (this.calls.T || 0) + 1;
+            }
+            F(args) {
+                expect(args).to.be.an('number');
+                this.calls.F = (this.calls.F || 0) + 1;
+            }
+            G0(args) {
+                expect(args).to.be.an('object');
+                this.calls.G0 = (this.calls.G0 || 0) + 1;
+            }
+            G1(args) {
+                expect(args).to.be.an('object');
+                this.calls.G1 = (this.calls.G1 || 0) + 1;
+            }
+        }
+
+        it('should call each function with the expected number of times.', (done) => {
+            const file = 'test/fixtures/t2laser.nc';
+            const runner = new Runner();
+            runner.loadFromFileSync(file);
+            expect(runner.calls.M3).to.equal(31);
+            expect(runner.calls.M5).to.equal(1);
+            expect(runner.calls.M6).to.equal(1);
+            expect(runner.calls.T).to.equal(1);
+            expect(runner.calls.F).to.equal(1);
+            expect(runner.calls.G0).to.equal(2);
+            expect(runner.calls.G1).to.equal(31);
+            done();
+        });
+
+        it('should call each function with the expected number of times.', (done) => {
+            const file = 'test/fixtures/t2laser.nc';
+            const string = fs.readFileSync(file, 'utf8');
+            const runner = new Runner();
+            runner.loadFromStringSync(string);
+            expect(runner.calls.M3).to.equal(31);
+            expect(runner.calls.M5).to.equal(1);
+            expect(runner.calls.M6).to.equal(1);
+            expect(runner.calls.T).to.equal(1);
+            expect(runner.calls.F).to.equal(1);
+            expect(runner.calls.G0).to.equal(2);
+            expect(runner.calls.G1).to.equal(31);
+            done();
+        });
+    });
 });

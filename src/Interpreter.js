@@ -10,8 +10,10 @@ import {
 const noop = () => {};
 
 /**
- * fromPairs([['a', 1], ['b', 2]]);
- * // => { 'a': 1, 'b': 2 }
+ * Returns an object composed from arrays of property names and values.
+ * @example
+ *   fromPairs([['a', 1], ['b', 2]]);
+ *   // => { 'a': 1, 'b': 2 }
  */
 const fromPairs = (pairs) => {
     let index = -1;
@@ -55,25 +57,52 @@ const interpret = (self, data) => {
         const words = groups[i];
         const word = words[0] || [];
         const letter = word[0];
-        const arg = word[1];
-        let cmd = (letter + arg);
+        const code = word[1];
+        let cmd = '';
         let args = {};
 
-        if ((letter === 'G') || (letter === 'M')) {
-            self.cmd = cmd;
-            args = fromPairs(words.slice(1)); // returns an object composed from arrays of property names and values
-        } else {
-            // Use the same command if the line does not start with Gxx or Mxx.
-            // For example:
-            // G0 Z0.25
-            //  X-0.5 Y0.
-            //  Z0.1
-            // G01 Z0. F5.
-            //  X0.5 Y0. I0. J-0.5
-            //  X0. Y-0.5 I-0.5 J0.
-            //  X-0.5 Y0. I0. J0.5
-            cmd = self.cmd;
-            args = fromPairs(words); // returns an object composed from arrays of property names and values.
+        if (letter === 'G') {
+            cmd = (letter + code);
+            args = fromPairs(words.slice(1));
+
+            // Motion Mode
+            if (code === 0 || code === 1 || code === 2 || code === 3 || code === 38.2 || code === 38.3 || code === 38.4 || code === 38.5) {
+                self.motionMode = cmd;
+            } else if (code === 80) {
+                self.motionMode = '';
+            }
+        } else if (letter === 'M') {
+            cmd = (letter + code);
+            args = fromPairs(words.slice(1));
+        } else if (letter === 'T') { // T1 ; w/o M6
+            cmd = letter;
+            args = code;
+        } else if (letter === 'F') { // F750 ; w/o motion command
+            cmd = letter;
+            args = code;
+        } else if (letter === 'X' || letter === 'Y' || letter === 'Z' || letter === 'A' || letter === 'B' || letter === 'C' || letter === 'I' || letter === 'J' || letter === 'K') {
+            // Use previous motion command if the line does not start with G-code or M-code.
+            // @example
+            //   G0 Z0.25
+            //   X-0.5 Y0.
+            //   Z0.1
+            //   G01 Z0. F5.
+            //   G2 X0.5 Y0. I0. J-0.5
+            //   X0. Y-0.5 I-0.5 J0.
+            //   X-0.5 Y0. I0. J0.5
+            // @example
+            //   G01
+            //   M03 S0
+            //   X5.2 Y0.2 M03 S0
+            //   X5.3 Y0.1 M03 S1000
+            //   X5.4 Y0 M03 S0
+            //   X5.5 Y0 M03 S0
+            cmd = self.motionMode;
+            args = fromPairs(words);
+        }
+
+        if (!cmd) {
+            continue;
         }
 
         if (typeof self.handlers[cmd] === 'function') {
@@ -89,7 +118,7 @@ const interpret = (self, data) => {
 };
 
 class Interpreter {
-    cmd = '';
+    motionMode = 'G0';
     handlers = {};
 
     constructor(options) {
