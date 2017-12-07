@@ -9,9 +9,7 @@
 ( Resolution : 0.1 )
 ( Image Name : text4272.png )
 M6 T1
-T2
-G21
-G90
+G21 G90 T2
 F750
 M05
 G00X0Y0F750
