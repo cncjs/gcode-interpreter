@@ -257,12 +257,10 @@ describe('G-code Interpreter', () => {
             }
             M6(args) {
                 expect(args).to.be.an('object');
-                expect(args.T).to.equal(1);
                 this.calls.M6 = (this.calls.M6 || 0) + 1;
             }
             T(args) {
                 expect(args).to.be.an('number');
-                expect(args).to.equal(2);
                 this.calls.T = (this.calls.T || 0) + 1;
             }
             F(args) {
@@ -286,7 +284,7 @@ describe('G-code Interpreter', () => {
             expect(runner.calls.M3).to.equal(31);
             expect(runner.calls.M5).to.equal(1);
             expect(runner.calls.M6).to.equal(1);
-            expect(runner.calls.T).to.equal(1);
+            expect(runner.calls.T).to.equal(2);
             expect(runner.calls.F).to.equal(1);
             expect(runner.calls.G0).to.equal(2);
             expect(runner.calls.G1).to.equal(31);
@@ -301,7 +299,7 @@ describe('G-code Interpreter', () => {
             expect(runner.calls.M3).to.equal(31);
             expect(runner.calls.M5).to.equal(1);
             expect(runner.calls.M6).to.equal(1);
-            expect(runner.calls.T).to.equal(1);
+            expect(runner.calls.T).to.equal(2);
             expect(runner.calls.F).to.equal(1);
             expect(runner.calls.G0).to.equal(2);
             expect(runner.calls.G1).to.equal(31);

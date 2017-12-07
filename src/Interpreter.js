@@ -35,7 +35,7 @@ const partitionWordsByGroup = (words = []) => {
         const word = words[i];
         const letter = word[0];
 
-        if ((letter === 'G') || (letter === 'M')) {
+        if ((letter === 'G') || (letter === 'M') || (letter === 'T')) {
             groups.push([word]);
             continue;
         }
