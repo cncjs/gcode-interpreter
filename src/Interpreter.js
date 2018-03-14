@@ -108,6 +108,8 @@ const interpret = (self, data) => {
         if (typeof self.handlers[cmd] === 'function') {
             const func = self.handlers[cmd];
             func(args);
+        } else if (typeof self.defaultHandler === 'function') {
+						self.defaultHandler(cmd, args);
         }
 
         if (typeof self[cmd] === 'function') {
@@ -124,8 +126,11 @@ class Interpreter {
     constructor(options) {
         options = options || {};
         options.handlers = options.handlers || {};
+        options.defaultHandler = options.defaultHandler ||
+				    (cmd, args) => {};
 
         this.handlers = options.handlers;
+				this.defaultHandler = options.defaultHandler;
     }
     loadFromStream(stream, callback = noop) {
         const s = parseStream(stream, callback);
