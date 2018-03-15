@@ -13,15 +13,19 @@ const Interpreter = require('gcode-interpreter');
 
 const Runner = function() {
     const handlers = {
-        'G0': (args) => {
-            console.log('G0', args);
+        'G0': (params) => {
+            console.log('G0', params);
         },
-        'G1': (args) => {
-            console.log('G1', args);
+        'G1': (params) => {
+            console.log('G1', params);
         }
     };
 
-    return new Interpreter({ handlers: handlers })
+    return new Interpreter({
+        handlers: handlers,
+        defaultHandler: (cmd, params) => {
+        }
+    });
 };
 
 const runner = new Runner()
@@ -100,7 +104,11 @@ class Toolpath {
     constructor(options) {
         options = options || {};
 
-        return new Interpreter({ handlers: this.handlers });
+        return new Interpreter({
+            handlers: this.handlers,
+            defaultHandler: (cmd, params) => {
+            }
+        });
     }
 }
 

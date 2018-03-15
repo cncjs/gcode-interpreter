@@ -114,6 +114,51 @@ describe('G-code Interpreter', () => {
         });
     });
 
+    describe('Default handler', () => {
+        it('should call default handler if no matching handler found.', (done) => {
+            let i = 0;
+            let defaultHandlerCalled = 0;
+            const file = 'test/fixtures/default-handler.nc';
+            const string = fs.readFileSync(file, 'utf8');
+            const runner = new Interpreter({
+                handlers: {
+                    'G0': (params) => {
+                    },
+                    'G1': (params) => {
+                    }
+                },
+                defaultHandler: (cmd, params) => {
+                    // G9999 P1
+
+                    defaultHandlerCalled++;
+                }
+            });
+            const results = runner.loadFromStringSync(string, (data, index) => {
+                expect(i).to.be.equal(index);
+                ++i;
+            });
+            expect(defaultHandlerCalled).to.be.equal(1);
+            expect(results).to.be.an('array');
+            expect(results.length).to.be.equal(3);
+            expect(results).to.deep.equal([
+                {
+                    line: 'G0 X0 Y0 Z0',
+                    words: [['G', 0], ['X', 0], ['Y', 0], ['Z', 0]]
+                },
+                {
+                    line: 'G1 X10 Y10',
+                    words: [['G', 1], ['X', 10], ['Y', 10]]
+                },
+                {
+                    line: 'G9999 P1',
+                    words: [['G', 9999], ['P', 1]]
+                }
+            ]);
+
+            done();
+        });
+    });
+
     describe('G-code: circle', () => {
         it('should call each function with the expected number of times.', (done) => {
             const calls = {};
