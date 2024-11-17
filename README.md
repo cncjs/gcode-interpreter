@@ -1,4 +1,4 @@
-# gcode-interpreter [![build status](https://travis-ci.org/cncjs/gcode-interpreter.svg?branch=master)](https://travis-ci.org/cncjs/gcode-interpreter) [![Coverage Status](https://coveralls.io/repos/cncjs/gcode-interpreter/badge.svg?branch=master&service=github)](https://coveralls.io/github/cncjs/gcode-interpreter?branch=master)
+# gcode-interpreter [![Coverage Status](https://coveralls.io/repos/cncjs/gcode-interpreter/badge.svg?branch=master&service=github)](https://coveralls.io/github/cncjs/gcode-interpreter?branch=master)
 
 [![NPM](https://nodei.co/npm/gcode-interpreter.png?downloads=true&stars=true)](https://www.npmjs.com/package/gcode-interpreter)
 
