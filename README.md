@@ -1,4 +1,4 @@
-# gcode-interpreter [![Coverage Status](https://coveralls.io/repos/cncjs/gcode-interpreter/badge.svg?branch=master&service=github)](https://coveralls.io/github/cncjs/gcode-interpreter?branch=master)
+# gcode-interpreter [![codecov](https://codecov.io/gh/cncjs/gcode-interpreter/graph/badge.svg?token=F8Z89O65FJ)](https://codecov.io/gh/cncjs/gcode-interpreter)
 
 [![NPM](https://nodei.co/npm/gcode-interpreter.png?downloads=true&stars=true)](https://www.npmjs.com/package/gcode-interpreter)
 
