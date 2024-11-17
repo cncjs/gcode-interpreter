@@ -1,3 +1,3 @@
 import Interpreter from './Interpreter';
 
-module.exports = Interpreter;
+export default Interpreter;
